@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>Essay Title Generator | Create Perfect Academic Paper Titles</title>
+    <meta name="title" content="Essay Title Generator | Create Perfect Academic Paper Titles">
+    <meta name="description" content="Free essay title generator tool to create engaging academic paper titles. Generate creative essay names and topics for your research papers, assignments and thesis.">
+    <meta name="keywords" content="essay title generator, title generator for essay, essay name generator, essay topic generator, essay titles generator, title of essay generator">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://yourdomain.com/essay-title-generator" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com/essay-title-generator">
+    <meta property="og:title" content="Essay Title Generator - Create Perfect Academic Paper Titles">
+    <meta property="og:description" content="Free essay title generator tool to create engaging academic paper titles. Generate creative essay names and topics instantly.">
+    <meta property="og:image" content="https://yourdomain.com/path-to-your-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yourdomain.com/essay-title-generator">
+    <meta property="twitter:title" content="Essay Title Generator - Create Perfect Academic Paper Titles">
+    <meta property="twitter:description" content="Free essay title generator tool to create engaging academic paper titles. Generate creative essay names and topics instantly.">
+    <meta property="twitter:image" content="https://yourdomain.com/path-to-your-image.jpg">
+    
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Enhanced Schema.org markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Essay Title Generator",
+        "description": "Free online tool for generating creative and engaging essay titles",
+        "applicationCategory": "Educational Software",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": [
+            "Generate essay titles",
+            "Create paper names",
+            "Topic suggestions",
+            "Academic title generation"
+        ],
+        "keywords": "essay title generator, title generator for essay, essay name generator, essay topic generator",
+        "url": "https://yourdomain.com/essay-title-generator",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript"
+    }
+    </script>
+</head>
+<body>
+    <header class="header">
+        <h1 class="header__title">Essay Title Generator</h1>
+        <!-- Added SEO-friendly subtitle -->
+        <p class="header__subtitle">Create Perfect Academic Paper Titles</p>
+    </header>
+
+    <main class="main" itemscope itemtype="https://schema.org/WebApplication">
+        <form class="form" id="generatorForm">
+            <div class="form__group">
+                <label class="form__label" for="topic">Topic/Keywords*</label>
+                <input type="text" class="form__input" id="topic" 
+                       placeholder="Enter your essay topic or keywords" required
+                       aria-label="Enter topic or keywords for your essay title">
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="essayType">Essay Type</label>
+                <select class="form__select" id="essayType" 
+                        aria-label="Select the type of your essay">
+                    <option value="">Select essay type</option>
+                    <option value="argumentative">Argumentative</option>
+                    <option value="descriptive">Descriptive</option>
+                    <option value="compare">Compare and Contrast</option>
+                    <option value="analytical">Analytical</option>
+                </select>
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="subject">Subject</label>
+                <select class="form__select" id="subject" 
+                        aria-label="Select the subject of your essay">
+                    <option value="">Select subject</option>
+                    <option value="environmental">Environmental Science</option>
+                    <option value="sociology">Sociology</option>
+                    <option value="education">Education</option>
+                    <option value="psychology">Psychology</option>
+                </select>
+            </div>
+
+            <button type="submit" class="form__button" 
+                    aria-label="Generate essay titles">Generate Titles</button>
+        </form>
+
+        <div class="loader" id="loader" hidden>
+            <div class="loader__spinner" aria-label="Loading titles"></div>
+        </div>
+
+        <section class="results" id="results">
+            <h2 class="results__title">Generated Titles</h2>
+            <div class="results__list" id="resultsList" 
+                 aria-live="polite" 
+                 aria-label="List of generated essay titles"></div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>Free online tool for generating creative and engaging essay titles</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
