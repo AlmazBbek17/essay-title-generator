@@ -41,6 +41,9 @@ app.post('/api/generate-titles', validateInput, async (req, res) => {
             body: JSON.stringify({
                 model: "google/gemini-2.0-flash-lite-001",
                 messages: [{
+                    role: "system",
+                    content: "You are a helpful assistant that generates creative and academic essay titles."
+                }, {
                     role: "user",
                     content: `Generate 5 creative and academic essay titles for the following parameters:
                     Topic: ${topic}
@@ -48,9 +51,7 @@ app.post('/api/generate-titles', validateInput, async (req, res) => {
                     Subject: ${subject || 'general'}
                     
                     Please provide only the titles, numbered 1-5, without any additional text.`
-                }],
-                temperature: 0.7,
-                max_tokens: 200
+                }]
             })
         });
 
@@ -59,26 +60,15 @@ app.post('/api/generate-titles', validateInput, async (req, res) => {
         const data = await response.json();
         console.log('API Response data:', data);
 
-        // Проверяем структуру ответа
-        if (data.error) {
-            throw new Error(`API Error: ${JSON.stringify(data.error)}`);
+        if (!data.choices || !data.choices[0]) {
+            throw new Error('Invalid API response: ' + JSON.stringify(data));
         }
 
-        let titles;
-        if (data.choices && data.choices[0] && data.choices[0].message) {
-            titles = data.choices[0].message.content
-                .split('\n')
-                .filter(title => title.trim())
-                .map(title => title.replace(/^\d+\.\s*/, ''));
-        } else if (data.choices && data.choices[0] && data.choices[0].text) {
-            titles = data.choices[0].text
-                .split('\n')
-                .filter(title => title.trim())
-                .map(title => title.replace(/^\d+\.\s*/, ''));
-        } else {
-            throw new Error('Unexpected API response format: ' + JSON.stringify(data));
-        }
-
+        const titles = data.choices[0].message.content
+            .split('\n')
+            .filter(title => title.trim())
+            .map(title => title.replace(/^\d+\.\s*/, ''));
+            
         if (titles.length === 0) {
             throw new Error('No titles generated');
         }
