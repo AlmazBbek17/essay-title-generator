@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Essay Generator</title>
+    <link rel="stylesheet" href="/essay-generator/styles.css">
+</head>
+<body>
+    <main class="main">
+        <nav class="back-nav">
+            <a href="/" class="back-link">← Back to Tools</a>
+        </nav>
+
+        <form class="form" id="essayForm">
+            <div class="form__group">
+                <label class="form__label" for="topic">Topic*</label>
+                <input type="text" class="form__input" id="topic" required>
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="type">Essay Type</label>
+                <select class="form__select" id="type">
+                    <option value="argumentative">Argumentative</option>
+                    <option value="expository">Expository</option>
+                    <option value="descriptive">Descriptive</option>
+                    <option value="narrative">Narrative</option>
+                    <option value="compare">Compare and Contrast</option>
+                </select>
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="wordCount">Word Count</label>
+                <select class="form__select" id="wordCount">
+                    <option value="300">300 words</option>
+                    <option value="500">500 words</option>
+                    <option value="750">750 words</option>
+                    <option value="1000">1000 words</option>
+                    <option value="1500">1500 words</option>
+                </select>
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="keyPoints">Key Points (Optional)</label>
+                <textarea class="form__input" id="keyPoints" rows="4" 
+                          placeholder="Enter main points or arguments, separated by new lines"></textarea>
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="requirements">Special Requirements (Optional)</label>
+                <textarea class="form__input" id="requirements" rows="3" 
+                          placeholder="Enter any specific requirements or formatting needs"></textarea>
+            </div>
+
+            <div class="form__group form__group--inline">
+                <label class="form__checkbox">
+                    <input type="checkbox" id="includeReferences">
+                    Include References
+                </label>
+                <label class="form__checkbox">
+                    <input type="checkbox" id="formalStyle">
+                    Formal Academic Style
+                </label>
+            </div>
+
+            <button type="submit" class="form__button">Generate Essay</button>
+        </form>
+
+        <div class="loader" id="loader" hidden></div>
+        <div class="results" id="results"></div>
+    </main>
+    <script src="/essay-generator/script.js"></script>
+</body>
+</html> 

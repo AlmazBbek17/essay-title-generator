@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title Generator</title>
+    <link rel="stylesheet" href="/title-generator/styles.css">
+    <script src="/title-generator/script.js"></script>
+</head>
+<body>
+    <main class="main">
+        <nav class="back-nav">
+            <a href="/" class="back-link">← Back to Tools</a>
+        </nav>
+
+        <form class="form" id="generatorForm">
+            <div class="form__group">
+                <label class="form__label" for="topic">Topic/Keywords*</label>
+                <input type="text" class="form__input" id="topic" required>
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="essayType">Essay Type</label>
+                <select class="form__select" id="essayType">
+                    <option value="">Select essay type</option>
+                    <option value="argumentative">Argumentative</option>
+                    <option value="descriptive">Descriptive</option>
+                    <option value="analytical">Analytical</option>
+                </select>
+            </div>
+
+            <button type="submit" class="form__button">Generate Titles</button>
+        </form>
+
+        <div class="loader" id="loader" hidden></div>
+        <div class="results" id="results"></div>
+    </main>
+</body>
+</html>

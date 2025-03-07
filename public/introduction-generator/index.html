@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction Generator</title>
+    <link rel="stylesheet" href="/introduction-generator/styles.css">
+</head>
+<body>
+    <main class="main">
+        <nav class="back-nav">
+            <a href="/" class="back-link">← Back to Tools</a>
+        </nav>
+
+        <form class="form" id="introForm">
+            <div class="form__group">
+                <label class="form__label" for="topic">Topic*</label>
+                <input type="text" class="form__input" id="topic" required>
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="thesis">Thesis Statement</label>
+                <textarea class="form__input" id="thesis" rows="3" 
+                          placeholder="Enter your thesis statement (optional)"></textarea>
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="style">Style</label>
+                <select class="form__select" id="style">
+                    <option value="formal">Formal Academic</option>
+                    <option value="engaging">Engaging/Hook</option>
+                    <option value="narrative">Narrative</option>
+                    <option value="question">Question-based</option>
+                </select>
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="length">Length</label>
+                <select class="form__select" id="length">
+                    <option value="short">Short (2-3 sentences)</option>
+                    <option value="medium">Medium (4-5 sentences)</option>
+                    <option value="long">Long (6+ sentences)</option>
+                </select>
+            </div>
+
+            <button type="submit" class="form__button">Generate Introduction</button>
+        </form>
+
+        <div class="loader" id="loader" hidden></div>
+        <div class="results" id="results"></div>
+    </main>
+    <script src="/introduction-generator/script.js"></script>
+</body>
+</html> 

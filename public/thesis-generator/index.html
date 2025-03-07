@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thesis Generator</title>
+    <link rel="stylesheet" href="/thesis-generator/styles.css">
+</head>
+<body>
+    <main class="main">
+        <nav class="back-nav">
+            <a href="/" class="back-link">← Back to Tools</a>
+        </nav>
+
+        <form class="form" id="thesisForm">
+            <div class="form__group">
+                <label class="form__label" for="topic">Topic*</label>
+                <input type="text" class="form__input" id="topic" required>
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="type">Thesis Type</label>
+                <select class="form__select" id="type">
+                    <option value="argumentative">Argumentative</option>
+                    <option value="analytical">Analytical</option>
+                    <option value="expository">Expository</option>
+                </select>
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="keywords">Keywords</label>
+                <input type="text" class="form__input" id="keywords" 
+                       placeholder="Enter keywords separated by commas">
+            </div>
+
+            <button type="submit" class="form__button">Generate Thesis</button>
+        </form>
+
+        <div class="loader" id="loader" hidden></div>
+        <div class="results" id="results"></div>
+    </main>
+    <script src="/thesis-generator/script.js"></script>
+</body>
+</html> 

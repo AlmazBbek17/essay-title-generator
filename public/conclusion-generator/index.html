@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conclusion Generator</title>
+    <link rel="stylesheet" href="/conclusion-generator/styles.css">
+</head>
+<body>
+    <main class="main">
+        <nav class="back-nav">
+            <a href="/" class="back-link">← Back to Tools</a>
+        </nav>
+
+        <form class="form" id="conclusionForm">
+            <div class="form__group">
+                <label class="form__label" for="topic">Topic*</label>
+                <input type="text" class="form__input" id="topic" required>
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="mainPoints">Main Points</label>
+                <textarea class="form__input" id="mainPoints" rows="4" 
+                          placeholder="Enter your main essay points, separated by new lines"></textarea>
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="thesis">Thesis Statement</label>
+                <textarea class="form__input" id="thesis" rows="3" 
+                          placeholder="Enter your thesis statement"></textarea>
+            </div>
+
+            <div class="form__group">
+                <label class="form__label" for="style">Style</label>
+                <select class="form__select" id="style">
+                    <option value="summary">Summary Style</option>
+                    <option value="call-to-action">Call to Action</option>
+                    <option value="reflection">Reflective</option>
+                    <option value="future">Future Implications</option>
+                </select>
+            </div>
+
+            <button type="submit" class="form__button">Generate Conclusion</button>
+        </form>
+
+        <div class="loader" id="loader" hidden></div>
+        <div class="results" id="results"></div>
+    </main>
+    <script src="/conclusion-generator/script.js"></script>
+</body>
+</html> 
