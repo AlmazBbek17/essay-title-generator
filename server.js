@@ -12,8 +12,19 @@ app.use(cors());
 // Раздача статических файлов
 app.use(express.static('public'));
 
+// Middleware для валидации
+const validateInput = (req, res, next) => {
+    const { topic } = req.body;
+    if (!topic || topic.trim().length < 3) {
+        return res.status(400).json({ 
+            error: 'Topic must be at least 3 characters long' 
+        });
+    }
+    next();
+};
+
 // API эндпоинт
-app.post('/api/generate-titles', async (req, res) => {
+app.post('/api/generate-titles', validateInput, async (req, res) => {
     try {
         const { topic, essayType, subject } = req.body;
         
@@ -47,15 +58,26 @@ app.post('/api/generate-titles', async (req, res) => {
         });
 
         const data = await response.json();
+        if (!data.choices || !data.choices[0]) {
+            throw new Error('Invalid API response');
+        }
+
         const titles = data.choices[0].message.content
             .split('\n')
             .filter(title => title.trim())
             .map(title => title.replace(/^\d+\.\s*/, ''));
             
+        if (titles.length === 0) {
+            throw new Error('No titles generated');
+        }
+
         res.json({ titles });
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).json({ error: 'Failed to generate titles' });
+        res.status(500).json({ 
+            error: 'Failed to generate titles',
+            details: error.message 
+        });
     }
 });
 

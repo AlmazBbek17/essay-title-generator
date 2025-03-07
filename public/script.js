@@ -110,15 +110,42 @@ function showNotification(message, isError = false) {
     }, 3000);
 }
 
-// Функция отображения результатов
+// Функция для плавного скролла к результатам
+function scrollToResults() {
+    const resultsSection = document.querySelector('.results');
+    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Обновляем функцию отображения результатов
 function displayResults(titles) {
     resultsList.innerHTML = '';
     titles.forEach(title => {
         resultsList.appendChild(createResultItem(title));
     });
+    
+    // Плавный скролл к результатам
+    setTimeout(() => {
+        scrollToResults();
+    }, 100);
 }
 
-// Обработчик отправки формы
+// Добавить анимацию загрузки
+function showLoadingState() {
+    const button = document.querySelector('.form__button');
+    button.disabled = true;
+    button.textContent = 'Generating...';
+    loader.hidden = false;
+}
+
+// Обновляем функцию hideLoadingState
+function hideLoadingState() {
+    const button = document.querySelector('.form__button');
+    button.disabled = false;
+    button.textContent = 'Generate More Titles'; // Изменяем текст кнопки
+    loader.hidden = true;
+}
+
+// Обновляем обработчик формы
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -131,23 +158,43 @@ form.addEventListener('submit', async (e) => {
         return;
     }
 
-    // Показываем индикатор загрузки
-    loader.hidden = false;
-    resultsList.innerHTML = '';
+    showLoadingState();
 
     try {
-        // Здесь будет вызов API, пока используем временную функцию
-        const titles = generateTempTitles(topic, essayType, subject);
+        // Заменяем временную функцию на реальный API запрос
+        const response = await fetch('/api/generate-titles', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                topic,
+                essayType,
+                subject
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to generate titles');
+        }
+
+        const data = await response.json();
         
+        if (data.error) {
+            throw new Error(data.error);
+        }
+
         // Сохраняем результаты в историю
-        historyManager.addToHistory(titles, topic, essayType, subject);
+        historyManager.addToHistory(data.titles, topic, essayType, subject);
         
         // Отображаем результаты
-        displayResults(titles);
+        displayResults(data.titles);
+        showNotification('Titles generated successfully!');
     } catch (error) {
-        showNotification('Error generating titles', true);
+        showNotification(error.message || 'Error generating titles', true);
+        hideLoadingState();
     } finally {
-        loader.hidden = true;
+        hideLoadingState();
     }
 });
 
