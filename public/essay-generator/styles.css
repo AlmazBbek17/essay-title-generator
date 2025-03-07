@@ -1,5 +1,5 @@
-/* Импортируем базовые стили */
-@import url('/title-generator/styles.css');
+/* Импортируем общие стили */
+@import url('/styles.css');
 
 /* Специфичные стили для генератора эссе */
 .form__group--inline {

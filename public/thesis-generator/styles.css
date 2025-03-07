@@ -1,3 +1,6 @@
+/* Импортируем общие стили */
+@import url('/styles.css');
+
 /* Переиспользуем основные стили */
 @import url('/title-generator/styles.css');
 
