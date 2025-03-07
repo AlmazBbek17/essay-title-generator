@@ -28,31 +28,33 @@ app.post('/api/generate-titles', validateInput, async (req, res) => {
     try {
         const { topic, essayType, subject } = req.body;
         
-        console.log('Generating titles for:', { topic, essayType, subject });
-
-        console.log('Using API Key:', process.env.AI_API_KEY ? 'Key is present' : 'Key is missing');
+        // Проверяем API ключ
+        if (!process.env.AI_API_KEY) {
+            throw new Error('API key is not configured');
+        }
+        console.log('API Key starts with:', process.env.AI_API_KEY.substring(0, 10) + '...');
 
         const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${process.env.AI_API_KEY}`,
                 'HTTP-Referer': '*',
-                'X-Title': 'Essay Title Generator',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 model: "google/gemini-2.0-flash-lite-001",
                 messages: [{
                     role: "user",
-                    content: `Generate 5 creative and academic essay titles for the following parameters:
-                    Topic: ${topic}
-                    Type: ${essayType || 'any'}
-                    Subject: ${subject || 'general'}`
+                    content: `Generate 5 essay titles about: ${topic}`
                 }]
             })
         });
 
-        console.log('API Response status:', response.status);
+        // Проверяем статус ответа
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`API request failed: ${JSON.stringify(errorData)}`);
+        }
 
         const data = await response.json();
         console.log('API Response data:', data);
@@ -72,11 +74,10 @@ app.post('/api/generate-titles', validateInput, async (req, res) => {
 
         res.json({ titles });
     } catch (error) {
-        console.error('Error details:', error);
+        console.error('Full error:', error);
         res.status(500).json({ 
             error: 'Failed to generate titles',
-            details: error.message,
-            stack: error.stack
+            details: error.message
         });
     }
 });
