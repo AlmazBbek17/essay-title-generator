@@ -161,3 +161,21 @@ body {
         width: 100%;
     }
 }
+
+/* Добавить стили для истории */
+.history {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.history__title {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.history__item {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
