@@ -30,28 +30,24 @@ app.post('/api/generate-titles', validateInput, async (req, res) => {
         
         console.log('Generating titles for:', { topic, essayType, subject });
 
+        console.log('Using API Key:', process.env.AI_API_KEY ? 'Key is present' : 'Key is missing');
+
         const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${process.env.AI_API_KEY}`,
-                'HTTP-Referer': 'https://essay-title-generator.up.railway.app',
+                'HTTP-Referer': '*',
                 'X-Title': 'Essay Title Generator',
-                'Content-Type': 'application/json',
-                'OR-Organization': 'essay-title-generator'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 model: "google/gemini-2.0-flash-lite-001",
                 messages: [{
-                    role: "system",
-                    content: "You are a helpful assistant that generates creative and academic essay titles."
-                }, {
                     role: "user",
                     content: `Generate 5 creative and academic essay titles for the following parameters:
                     Topic: ${topic}
                     Type: ${essayType || 'any'}
-                    Subject: ${subject || 'general'}
-                    
-                    Please provide only the titles, numbered 1-5, without any additional text.`
+                    Subject: ${subject || 'general'}`
                 }]
             })
         });
