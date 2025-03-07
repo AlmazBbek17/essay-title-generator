@@ -34,9 +34,10 @@ app.post('/api/generate-titles', validateInput, async (req, res) => {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${process.env.AI_API_KEY}`,
-                'HTTP-Referer': 'https://essay-title-generator.com',
+                'HTTP-Referer': 'https://essay-title-generator.up.railway.app',
                 'X-Title': 'Essay Title Generator',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'OR-Organization': 'essay-title-generator'
             },
             body: JSON.stringify({
                 model: "google/gemini-2.0-flash-lite-001",
