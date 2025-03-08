@@ -1,9 +1,6 @@
 /* Импортируем общие стили */
 @import url('/styles.css');
 
-/* Переиспользуем основные стили */
-@import url('/title-generator/styles.css');
-
 /* Специфичные стили для генератора тезисов */
 .result-item__text {
     font-size: 1.1rem;
