@@ -1,0 +1,62 @@
+/* Импортируем общие стили */
+@import url('/styles.css');
+
+/* Специфичные стили для генератора заголовков */
+.results__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.result-item {
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.result-item__text {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.result-item__copy {
+    padding: 0.5rem 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.result-item__copy:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Улучшенные стили формы */
+.form {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* История */
+.history {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.history__title {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.history__item {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
