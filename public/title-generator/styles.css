@@ -6,14 +6,20 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    margin-bottom: 1rem;
 }
 
 .result-item {
-    margin-bottom: 1.5rem;
-    padding: 1.5rem;
     background: white;
+    padding: 1.5rem;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.result-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .result-item__text {
@@ -30,7 +36,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.3s;
 }
 
 .result-item__copy:hover {
@@ -40,7 +46,36 @@
 /* Улучшенные стили формы */
 .form {
     max-width: 800px;
-    margin: 0 auto;
+    margin: 0 auto 2rem;
+}
+
+/* Стили для кнопки регенерации */
+.regenerate-button {
+    margin-top: 1rem;
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.regenerate-button:hover {
+    background-color: var(--primary-color);
+}
+
+/* Стили для состояния загрузки */
+.loader {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+/* Анимация для кнопок */
+button:active {
+    transform: translateY(1px);
 }
 
 /* История */

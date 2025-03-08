@@ -5,10 +5,10 @@ const MAX_HISTORY_ITEMS = 10;
 // Получаем элементы DOM
 const form = document.getElementById('generatorForm');
 const topicInput = document.getElementById('topic');
-const essayTypeSelect = document.getElementById('essayType');
+const typeSelect = document.getElementById('essayType');
 const subjectSelect = document.getElementById('subject');
 const loader = document.getElementById('loader');
-const resultsList = document.getElementById('resultsList');
+const results = document.getElementById('results');
 
 // Класс для управления историей генераций
 class HistoryManager {
@@ -48,85 +48,140 @@ class HistoryManager {
 // Создаем экземпляр менеджера истории
 const historyManager = new HistoryManager(STORAGE_KEY, MAX_HISTORY_ITEMS);
 
-// Функция для генерации временных заголовков (будет заменена на API)
-function generateTempTitles(topic, essayType, subject) {
-    const baseTemplates = [
-        "The Complete Guide to {topic}",
-        "Understanding {topic}: A {type} Analysis",
-        "{topic}: Challenges and Opportunities",
-        "The Impact of {topic} on Modern Society",
-        "Exploring the Relationship Between {topic} and {subject}"
-    ];
-
-    return baseTemplates.map(template => {
-        return template
-            .replace('{topic}', topic)
-            .replace('{type}', essayType || 'Comprehensive')
-            .replace('{subject}', subject || 'Contemporary Issues');
-    });
+// Функция показа загрузки
+function showLoading() {
+    loader.hidden = false;
+    form.querySelector('button').disabled = true;
+    form.querySelector('button').textContent = 'Generating...';
 }
 
-// Функция для создания элемента результата
-function createResultItem(title) {
-    const resultItem = document.createElement('div');
-    resultItem.className = 'result-item';
-
-    const titleSpan = document.createElement('span');
-    titleSpan.className = 'result-item__title';
-    titleSpan.textContent = title;
-
-    const copyButton = document.createElement('button');
-    copyButton.className = 'result-item__copy';
-    copyButton.textContent = 'Copy';
-    copyButton.addEventListener('click', () => copyToClipboard(title));
-
-    resultItem.appendChild(titleSpan);
-    resultItem.appendChild(copyButton);
-
-    return resultItem;
+// Функция скрытия загрузки
+function hideLoading() {
+    loader.hidden = true;
+    form.querySelector('button').disabled = false;
+    form.querySelector('button').textContent = 'Generate Titles';
 }
 
-// Функция копирования в буфер обмена
-async function copyToClipboard(text) {
+// Функция отображения результатов
+function displayResults(titles) {
+    const titlesHTML = titles.map(title => `
+        <div class="result-item">
+            <p class="result-item__text">${title}</p>
+            <button onclick="copyToClipboard(this)" class="result-item__copy" data-text="${title}">
+                Copy
+            </button>
+        </div>
+    `).join('');
+
+    results.innerHTML = `
+        <div class="results__list">
+            ${titlesHTML}
+        </div>
+        <button onclick="regenerateTitles()" class="form__button" style="margin-top: 1rem;">
+            Generate More Titles
+        </button>
+    `;
+}
+
+// Функция генерации заголовков
+async function generateTitles(topic, type) {
     try {
-        await navigator.clipboard.writeText(text);
-        showNotification('Title copied to clipboard!');
-    } catch (err) {
-        showNotification('Error copying to clipboard', true);
+        const response = await fetch('/api/generate-titles', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                topic: topic,
+                type: type
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to generate titles');
+        }
+
+        const data = await response.json();
+        
+        // Временное решение для демонстрации (замените на реальный API)
+        return [
+            `The Impact of ${topic} on Modern Society: A ${type} Analysis`,
+            `Understanding ${topic}: A Comprehensive ${type} Study`,
+            `${topic}: Exploring the Future Through ${type} Perspective`,
+            `The Evolution of ${topic}: A Critical ${type} Review`,
+            `${topic} in the Digital Age: A ${type} Examination`
+        ];
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
     }
 }
 
-// Функция отображения уведомления
-function showNotification(message, isError = false) {
-    const notification = document.createElement('div');
-    notification.className = `notification ${isError ? 'notification--error' : 'notification--success'}`;
-    notification.textContent = message;
+// Функция повторной генерации
+async function regenerateTitles() {
+    const topic = topicInput.value;
+    const type = typeSelect.value;
+    
+    if (!topic) {
+        alert('Please enter a topic');
+        return;
+    }
 
-    document.body.appendChild(notification);
+    showLoading();
+    try {
+        const titles = await generateTitles(topic, type);
+        displayResults(titles);
+    } catch (error) {
+        alert('Error generating titles: ' + error.message);
+    } finally {
+        hideLoading();
+    }
+}
 
-    // Удаляем уведомление через 3 секунды
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
+// Обработчик отправки формы
+form.addEventListener('submit', async (e) => {
+    e.preventDefault(); // Предотвращаем перезагрузку страницы
+
+    const topic = topicInput.value.trim();
+    const type = typeSelect.value;
+
+    if (!topic) {
+        alert('Please enter a topic');
+        return;
+    }
+
+    showLoading();
+    try {
+        const titles = await generateTitles(topic, type);
+        displayResults(titles);
+    } catch (error) {
+        alert('Error generating titles: ' + error.message);
+    } finally {
+        hideLoading();
+    }
+});
+
+// Функция копирования в буфер обмена
+async function copyToClipboard(button) {
+    const text = button.dataset.text;
+    try {
+        await navigator.clipboard.writeText(text);
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        button.style.backgroundColor = 'var(--success-color)';
+        setTimeout(() => {
+            button.textContent = originalText;
+            button.style.backgroundColor = '';
+        }, 2000);
+    } catch (err) {
+        alert('Failed to copy text');
+    }
 }
 
 // Функция для плавного скролла к результатам
 function scrollToResults() {
     const resultsSection = document.querySelector('.results');
     resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-// Обновляем функцию отображения результатов
-function displayResults(titles) {
-    resultsList.innerHTML = '';
-    titles.forEach(title => {
-        resultsList.appendChild(createResultItem(title));
-    });
-    
-    // Плавный скролл к результатам
-    setTimeout(() => {
-        scrollToResults();
-    }, 100);
 }
 
 // Добавить анимацию загрузки
@@ -144,59 +199,6 @@ function hideLoadingState() {
     button.textContent = 'Generate More Titles'; // Изменяем текст кнопки
     loader.hidden = true;
 }
-
-// Обновляем обработчик формы
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const topic = topicInput.value.trim();
-    const essayType = essayTypeSelect.value;
-    const subject = subjectSelect.value;
-
-    if (!topic) {
-        showNotification('Please enter a topic', true);
-        return;
-    }
-
-    showLoadingState();
-
-    try {
-        // Заменяем временную функцию на реальный API запрос
-        const response = await fetch('/api/generate-titles', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                topic,
-                essayType,
-                subject
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to generate titles');
-        }
-
-        const data = await response.json();
-        
-        if (data.error) {
-            throw new Error(data.error);
-        }
-
-        // Сохраняем результаты в историю
-        historyManager.addToHistory(data.titles, topic, essayType, subject);
-        
-        // Отображаем результаты
-        displayResults(data.titles);
-        showNotification('Titles generated successfully!');
-    } catch (error) {
-        showNotification(error.message || 'Error generating titles', true);
-        hideLoadingState();
-    } finally {
-        hideLoadingState();
-    }
-});
 
 // Добавляем стили для уведомлений
 const notificationStyles = `
@@ -233,28 +235,3 @@ const notificationStyles = `
 const styleSheet = document.createElement('style');
 styleSheet.textContent = notificationStyles;
 document.head.appendChild(styleSheet);
-
-async function generateTitles(topic, essayType, subject) {
-    try {
-        const response = await fetch('/api/generate-titles', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                topic,
-                essayType,
-                subject
-            })
-        });
-        
-        if (!response.ok) {
-            throw new Error('Failed to generate titles');
-        }
-        
-        return await response.json();
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
-    }
-}
