@@ -1,6 +1,9 @@
 // Основные константы
 const STORAGE_KEY = 'thesisHistory';
 const MAX_HISTORY_ITEMS = 10;
+const API_BASE_URL = window.location.hostname === 'localhost' 
+    ? '' // На локальном сервере используем относительные пути
+    : 'https://writerai-production.up.railway.app'; // URL вашего Railway приложения
 
 // Получаем элементы DOM
 const form = document.getElementById('thesisForm');
@@ -48,7 +51,9 @@ function displayResults(theses) {
 // Функция генерации тезисов
 async function generateThesis(topic, type, keywords) {
     try {
-        const response = await fetch('/api/generate-thesis', {
+        console.log('Sending request with:', { topic, type, keywords });
+        
+        const response = await fetch(`${API_BASE_URL}/api/generate-thesis`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -60,18 +65,20 @@ async function generateThesis(topic, type, keywords) {
             })
         });
 
+        const data = await response.json();
+
         if (!response.ok) {
-            throw new Error('Failed to generate thesis');
+            console.error('Server error:', data);
+            throw new Error(data.details || data.error || 'Failed to generate thesis');
         }
 
-        // Временное решение для демонстрации
-        return [
-            `Through comprehensive ${type} analysis, this paper demonstrates how ${topic} significantly impacts ${keywords || 'modern society'}.`,
-            `This ${type} study explores the complex relationship between ${topic} and ${keywords || 'contemporary developments'}.`,
-            `By examining ${topic} through a ${type} lens, this research reveals critical insights about ${keywords || 'current trends'}.`
-        ];
+        if (!data.theses || !data.theses.length) {
+            throw new Error('No thesis statements received');
+        }
+
+        return data.theses;
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error in generateThesis:', error);
         throw error;
     }
 }
@@ -118,7 +125,8 @@ form.addEventListener('submit', async (e) => {
         displayResults(theses);
         scrollToResults();
     } catch (error) {
-        alert('Error generating thesis: ' + error.message);
+        console.error('Form submission error:', error);
+        alert(`Error generating thesis: ${error.message}`);
     } finally {
         hideLoading();
     }

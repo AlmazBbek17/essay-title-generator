@@ -22,15 +22,6 @@ app.use(cors({
 app.use(express.json());
 app.use(express.static('public'));
 
-// Добавляем обработку ошибок
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ 
-        error: 'Something went wrong!',
-        message: err.message 
-    });
-});
-
 // Конфигурация API
 const AI_API_KEY = process.env.AI_API_KEY;
 const AI_API_URL = process.env.AI_API_URL;
@@ -38,6 +29,8 @@ const AI_API_URL = process.env.AI_API_URL;
 // Вспомогательная функция для запросов к AI API
 async function generateAIResponse(prompt, maxTokens = 500) {
     try {
+        console.log('Sending request to AI API with prompt:', prompt);
+        
         const response = await fetch(AI_API_URL, {
             method: 'POST',
             headers: {
@@ -54,15 +47,22 @@ async function generateAIResponse(prompt, maxTokens = 500) {
             })
         });
 
+        const data = await response.json();
+        
         if (!response.ok) {
-            throw new Error('AI API request failed');
+            console.error('AI API Error Response:', data);
+            throw new Error(data.error?.message || 'AI API request failed');
         }
 
-        const data = await response.json();
+        if (!data.choices?.[0]?.message?.content) {
+            console.error('Invalid AI API Response:', data);
+            throw new Error('Invalid response from AI API');
+        }
+
         return data.choices[0].message.content;
     } catch (error) {
         console.error('AI API Error:', error);
-        throw error;
+        throw new Error(`AI API Error: ${error.message}`);
     }
 }
 
@@ -86,15 +86,36 @@ app.post('/api/generate-titles', async (req, res) => {
 // Генерация тезисов
 app.post('/api/generate-thesis', async (req, res) => {
     try {
+        console.log('Received thesis generation request:', req.body);
+        
         const { topic, type, keywords } = req.body;
-        const prompt = `Generate 3 strong ${type} thesis statements about "${topic}"${keywords ? ` incorporating these keywords: ${keywords}` : ''}.`;
+        
+        if (!topic) {
+            return res.status(400).json({ error: 'Topic is required' });
+        }
+
+        const prompt = `Generate 3 strong ${type || 'argumentative'} thesis statements about "${topic}"${
+            keywords ? ` incorporating these keywords: ${keywords}` : ''
+        }.`;
+
+        console.log('Generated prompt:', prompt);
         
         const response = await generateAIResponse(prompt, 300);
         const theses = response.split('\n').filter(thesis => thesis.trim());
         
+        if (!theses.length) {
+            throw new Error('No thesis statements generated');
+        }
+
+        console.log('Generated theses:', theses);
+        
         res.json({ theses });
     } catch (error) {
-        res.status(500).json({ error: 'Failed to generate thesis statements' });
+        console.error('Thesis generation error:', error);
+        res.status(500).json({ 
+            error: 'Failed to generate thesis',
+            details: error.message
+        });
     }
 });
 
@@ -152,7 +173,18 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Глобальная обработка ошибок
+app.use((err, req, res, next) => {
+    console.error('Global error handler:', err);
+    res.status(500).json({ 
+        error: 'Something went wrong!',
+        details: err.message 
+    });
+});
+
 // Запуск сервера
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    console.log('AI API URL:', AI_API_URL);
+    console.log('API Key configured:', !!AI_API_KEY);
 }); 
