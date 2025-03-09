@@ -1,6 +1,9 @@
 // Основные константы
 const STORAGE_KEY = 'essayTitleHistory';
 const MAX_HISTORY_ITEMS = 10;
+const API_BASE_URL = window.location.hostname === 'localhost' 
+    ? '' // На локальном сервере используем относительные пути
+    : 'https://writerai-production.up.railway.app'; // URL вашего Railway приложения
 
 // Получаем элементы DOM
 const form = document.getElementById('generatorForm');
@@ -86,14 +89,14 @@ function displayResults(titles) {
 // Функция генерации заголовков
 async function generateTitles(topic, type) {
     try {
-        const response = await fetch('/api/generate-titles', {
+        const response = await fetch(`${API_BASE_URL}/api/generate-titles`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                topic: topic,
-                type: type
+                topic,
+                type
             })
         });
 
@@ -102,15 +105,7 @@ async function generateTitles(topic, type) {
         }
 
         const data = await response.json();
-        
-        // Временное решение для демонстрации (замените на реальный API)
-        return [
-            `The Impact of ${topic} on Modern Society: A ${type} Analysis`,
-            `Understanding ${topic}: A Comprehensive ${type} Study`,
-            `${topic}: Exploring the Future Through ${type} Perspective`,
-            `The Evolution of ${topic}: A Critical ${type} Review`,
-            `${topic} in the Digital Age: A ${type} Examination`
-        ];
+        return data.titles;
     } catch (error) {
         console.error('Error:', error);
         throw error;

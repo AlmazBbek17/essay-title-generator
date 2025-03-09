@@ -7,10 +7,29 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(cors());
+// Настройка CORS
+app.use(cors({
+    origin: [
+        'http://localhost:3000',
+        'https://writerai.me',
+        'https://www.writerai.me',
+        'https://writerai-production.up.railway.app'
+    ],
+    methods: ['GET', 'POST'],
+    credentials: true
+}));
+
 app.use(express.json());
 app.use(express.static('public'));
+
+// Добавляем обработку ошибок
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ 
+        error: 'Something went wrong!',
+        message: err.message 
+    });
+});
 
 // Конфигурация API
 const AI_API_KEY = process.env.AI_API_KEY;
