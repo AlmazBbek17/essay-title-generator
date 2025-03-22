@@ -3,7 +3,7 @@ const STORAGE_KEY = 'essayTitleHistory';
 const MAX_HISTORY_ITEMS = 10;
 const API_BASE_URL = window.location.hostname === 'localhost' 
     ? '' // На локальном сервере используем относительные пути
-    : 'https://writerai-production.up.railway.app'; // URL вашего Railway приложения
+    : 'https://writerai.me'; // Используем основной домен
 
 // Получаем элементы DOM
 const form = document.getElementById('generatorForm');

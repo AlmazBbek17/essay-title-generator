@@ -23,7 +23,8 @@ app.use(cors({
         'http://localhost:3000',
         'https://writerai.me',
         'https://www.writerai.me',
-        'https://writerai-production.up.railway.app'
+        'http://writerai.me',
+        'http://www.writerai.me'
     ],
     methods: ['GET', 'POST'],
     credentials: true
