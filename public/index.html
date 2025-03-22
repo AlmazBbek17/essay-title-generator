@@ -11,6 +11,7 @@
     <meta property="og:type" content="website">
     <link rel="stylesheet" href="/styles.css">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✍️</text></svg>">
+    <script src="/main.js" defer></script>
 </head>
 <body>
     <header class="header">
@@ -55,32 +56,5 @@
     <footer class="footer">
         <p>© 2024 WriterAI. Made with ❤️ for students and writers.</p>
     </footer>
-
-    <script>
-        // Добавляем обработку ошибок
-        window.onerror = function(msg, url, lineNo, columnNo, error) {
-            console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError object: ' + JSON.stringify(error));
-            return false;
-        };
-
-        // Добавляем индикатор загрузки для всех fetch запросов
-        window.addEventListener('fetch', function(event) {
-            const loader = document.createElement('div');
-            loader.className = 'loader';
-            document.body.appendChild(loader);
-
-            event.respondWith(
-                fetch(event.request)
-                    .then(response => {
-                        loader.remove();
-                        return response;
-                    })
-                    .catch(error => {
-                        loader.remove();
-                        throw error;
-                    })
-            );
-        });
-    </script>
 </body>
 </html> 
