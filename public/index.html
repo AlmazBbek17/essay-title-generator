@@ -3,14 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WriterAI - AI Writing Tools</title>
-    <meta name="description" content="Free AI-powered writing tools. Generate essay titles, thesis statements, introductions, conclusions and full essays.">
+    <title>WriterAI - AI Writing Assistant</title>
+    <meta name="description" content="Free AI-powered writing tools. Generate essay titles, thesis statements, introductions, conclusions and full essays with advanced AI technology.">
+    <meta name="theme-color" content="#0070f3">
+    <meta property="og:title" content="WriterAI - AI Writing Assistant">
+    <meta property="og:description" content="Free AI-powered writing tools. Generate essay titles, thesis statements, introductions, conclusions and full essays with advanced AI technology.">
+    <meta property="og:type" content="website">
     <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✍️</text></svg>">
 </head>
 <body>
     <header class="header">
         <h1 class="header__title">WriterAI</h1>
-        <p class="header__subtitle">AI-Powered Writing Tools</p>
+        <p class="header__subtitle">Transform your writing with AI-powered assistance. Generate titles, thesis statements, and complete essays in seconds.</p>
     </header>
 
     <main class="main">
@@ -18,37 +23,64 @@
             <a href="/title-generator" class="tool-card">
                 <div class="tool-card__icon">📝</div>
                 <h2 class="tool-card__title">Title Generator</h2>
-                <p class="tool-card__description">Create perfect titles for your essays and papers</p>
+                <p class="tool-card__description">Create engaging and SEO-optimized titles for your essays, articles, and research papers</p>
             </a>
 
             <a href="/thesis-generator" class="tool-card">
                 <div class="tool-card__icon">💡</div>
                 <h2 class="tool-card__title">Thesis Generator</h2>
-                <p class="tool-card__description">Generate strong thesis statements</p>
+                <p class="tool-card__description">Generate compelling thesis statements that perfectly capture your argument</p>
             </a>
 
             <a href="/introduction-generator" class="tool-card">
                 <div class="tool-card__icon">📖</div>
                 <h2 class="tool-card__title">Introduction Generator</h2>
-                <p class="tool-card__description">Create engaging essay introductions</p>
+                <p class="tool-card__description">Create powerful introductions that hook your readers from the first sentence</p>
             </a>
 
             <a href="/conclusion-generator" class="tool-card">
                 <div class="tool-card__icon">✍️</div>
                 <h2 class="tool-card__title">Conclusion Generator</h2>
-                <p class="tool-card__description">Generate powerful conclusions</p>
+                <p class="tool-card__description">Craft impactful conclusions that leave a lasting impression</p>
             </a>
 
             <a href="/essay-generator" class="tool-card">
                 <div class="tool-card__icon">📚</div>
                 <h2 class="tool-card__title">Essay Generator</h2>
-                <p class="tool-card__description">Generate complete essays with AI</p>
+                <p class="tool-card__description">Generate well-structured, researched essays on any topic in minutes</p>
             </a>
         </div>
     </main>
 
     <footer class="footer">
-        <p>© 2024 WriterAI. All rights reserved.</p>
+        <p>© 2024 WriterAI. Made with ❤️ for students and writers.</p>
     </footer>
+
+    <script>
+        // Добавляем обработку ошибок
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError object: ' + JSON.stringify(error));
+            return false;
+        };
+
+        // Добавляем индикатор загрузки для всех fetch запросов
+        window.addEventListener('fetch', function(event) {
+            const loader = document.createElement('div');
+            loader.className = 'loader';
+            document.body.appendChild(loader);
+
+            event.respondWith(
+                fetch(event.request)
+                    .then(response => {
+                        loader.remove();
+                        return response;
+                    })
+                    .catch(error => {
+                        loader.remove();
+                        throw error;
+                    })
+            );
+        });
+    </script>
 </body>
 </html> 
